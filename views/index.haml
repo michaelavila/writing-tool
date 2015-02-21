@@ -1,0 +1,28 @@
+!!!
+%html
+  %head
+    %title Stream of Consciousness Writing
+    %script(type='text/javascript' src='//code.jquery.com/jquery-1.11.2.min.js')
+    :css
+      body {
+        text-align: center;
+      }
+
+    :javascript
+      function getStarted(event) {
+        var selectedLimit = $('#limit option:selected').val();
+        $.post("/streams", {timelimit: selectedLimit}, function(data) {
+          window.location.href = '/streams/' + data;
+        });
+      }
+  %body
+    %h1 Stream of Consciousness Writing
+
+    %p
+      %h2 Time Limit?
+      %select(id='limit')
+        %option(value='10') 10 seconds
+        %option(value='300') 5 minutes
+        %option(value='600') 10 minutes
+    %p
+      %button(onclick='getStarted(event);') Start Writing

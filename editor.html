@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      body {
+        margin: 0;
+        text-align: center;
+      }
+
+      textarea {
+        resize: none;
+        width: 60%;
+        text-align: center;
+        border: none;
+        outline: none;
+        font-size: 16px;
+      }
+    </style>
+
+    <script>
+    function archiveIfCompleteSentence(event) {
+      var sentence = event.target.value;
+      if (sentence === "") {
+        return;
+      }
+      event.target.style.height = event.target.scrollHeight + "px";
+      var lastChar = sentence.substr(sentence.length-1);
+      var endOfSentence = [".", "?", "!"];
+      if (endOfSentence.indexOf(lastChar) !== -1) {
+        event.target.value = "";
+      }
+    }
+    </script>
+  </head>
+
+  <body>
+    <h1>Stream Writing Tool</h1>
+    <textarea oninput="archiveIfCompleteSentence(event);"></textarea>
+  </body>
+</html>

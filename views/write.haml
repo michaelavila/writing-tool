@@ -1,0 +1,55 @@
+!!!
+%html
+  %head
+    %title Stream of Consciousness Writing
+    %script(type='text/javascript' src='//code.jquery.com/jquery-1.11.2.min.js')
+    :css
+      body {
+        margin: 0;
+        text-align: center;
+      }
+
+      textarea {
+        resize: none;
+        width: 60%;
+        text-align: center;
+        border: none;
+        outline: none;
+        font-size: 16px;
+      }
+
+    :javascript
+      function refreshWhenExpired() {
+        setTimeout(function() {
+          archive(getSentence());
+          alert("Times up!");
+          window.location.reload();
+        }, #{@stream.expires_in} * 1000);
+      }
+
+      function getSentence() {
+        return $("#sentence").val();
+      }
+
+      function archiveIfCompleteSentence(event) {
+        event.target.style.height = event.target.scrollHeight + "px";
+        var sentence = getSentence();
+        var lastChar = sentence.slice(-1);
+        var endOfSentence = [".", "?", "!"];
+        if ($.inArray(lastChar, endOfSentence) != -1) {
+          event.target.value = "";
+          archive(sentence);
+        }
+      }
+
+      function archive(text) {
+        $.post(window.location.href, {sentence: text});
+      }
+
+      function isEnterKey(event) {
+        return event.keyCode != 13;
+      }
+
+  %body(onload="refreshWhenExpired();")
+    %h1 Stream of Consciousness Writing
+    %textarea(id="sentence" oninput="archiveIfCompleteSentence(event);" onkeypress="return isEnterKey(event);" placeholder="Start writing here" autofocus)
